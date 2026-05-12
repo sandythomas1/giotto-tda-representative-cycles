@@ -1,7 +1,13 @@
 """
 Example gallery for representative_cycles.py
 =============================================
-Runs four example datasets and saves figures to ./output/.
+Runs five example datasets and saves figures to ./output/:
+
+  1. Circle       — one H1 loop
+  2. Figure-eight — two H1 loops
+  3. Torus        — two H1 loops (H1(T^2) = Z x Z)
+  4. Annulus      — one H1 loop
+  5. Sphere       — no H1 loops (H2 void, not captured here)
 
 Run with:
     python examples.py
