@@ -20,7 +20,7 @@ env/
 .coverage
 htmlcov/
 
-# Generated output (run examples.py or zoo_paper_replication.py to regenerate)
+# Generated output (run examples.py or zhu_paper_replication.py to regenerate)
 output/
 
 # PDFs — do not commit copyrighted papers

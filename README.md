@@ -182,8 +182,8 @@ reconstruction run in float64 to preserve accuracy.
 # five canonical examples (circle, figure-eight, torus, annulus, sphere)
 python examples.py
 
-# Zhu (2013) zoo-paper replication with pass/fail checks
-python zoo_paper_replication.py
+# Zhu (2013) paper replication with pass/fail checks
+python zhu_paper_replication.py
 
 # outputs saved to ./output/
 ```
@@ -195,7 +195,7 @@ python zoo_paper_replication.py
 ```
 representative_cycles.py    core module
 examples.py                 gallery of five canonical examples
-zoo_paper_replication.py    Zhu (2013) replication with pass/fail checks
+zhu_paper_replication.py    Zhu (2013) replication with pass/fail checks
 requirements.txt
 tests/
     test_representative_cycles.py   pytest suite

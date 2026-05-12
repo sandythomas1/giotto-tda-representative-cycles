@@ -1,6 +1,6 @@
 """
-Zoo-Paper Replication: Persistent Homology Examples A–E
-=========================================================
+Zhu-Paper Replication: Persistent Homology Examples A–E
+=======================================================
 Replicates the canonical persistent-homology examples from:
 
   Zhu, X. (2013). "Persistent Homology: An Introduction and a New Text
@@ -23,7 +23,7 @@ Expected topology (from the paper + standard TDA theory)
   E  Sphere S²             β1 = 0   H2=1 not captured by H1 → only short noise bars
 
 Run with the Python 3.12 environment that has giotto-tda + gph-ripser:
-    python zoo_paper_replication.py
+    python zhu_paper_replication.py
 """
 
 from __future__ import annotations
@@ -148,7 +148,7 @@ def example_B_circle() -> tuple:
     feats = rc.features_
     if len(feats) == 0:
         print("  No H1 features found.")
-        return rc
+        return rc, 0
 
     top = feats[0]
     rest = feats[1:]
@@ -196,7 +196,7 @@ def example_C_figure_eight() -> tuple:
     if len(feats) < 2:
         print(f"  Only {len(feats)} H1 feature(s) found.")
         rc.summary()
-        return rc
+        return rc, len(feats)
 
     f0, f1 = feats[0], feats[1]
     ratio = f1.persistence / f0.persistence
@@ -252,7 +252,7 @@ def example_D_torus() -> tuple:
     if len(feats) < 2:
         print(f"  Only {len(feats)} feature(s) found.")
         rc.summary()
-        return rc
+        return rc, len(feats)
 
     f0, f1 = feats[0], feats[1]
     third_pers = feats[2].persistence if len(feats) > 2 else 0.0
@@ -304,7 +304,7 @@ def example_E_sphere() -> tuple:
     feats = rc.features_
     if not feats:
         print("  No H1 features at all — perfect null result.")
-        return rc
+        return rc, 0
 
     max_pers = feats[0].persistence
     min_pers = feats[-1].persistence
@@ -417,7 +417,7 @@ def _plot_cycle_panel(ax, rc: RepresentativeCycles, rank: int,
     ax.autoscale_view()
 
 
-def plot_zoo_comparison(
+def plot_zhu_comparison(
     results: dict[str, RepresentativeCycles],
     save_path: str,
 ) -> None:
@@ -458,7 +458,7 @@ def plot_zoo_comparison(
                bbox_to_anchor=(1.0, 1.0))
 
     fig.suptitle(
-        "Zoo-Paper Replication: Examples A-E\n"
+        "Zhu-Paper Replication: Examples A-E\n"
         "(Zhu 2013, Persistent Homology: An Introduction and NLP Application)",
         fontsize=11, fontweight="bold", y=1.02,
     )
@@ -491,14 +491,14 @@ if __name__ == "__main__":
         fig = rc.plot_matplotlib(
             max_cycles=max_c,
             title=f"Example {label} — Representative H₁ Cycles",
-            save_path=os.path.join(OUTPUT_DIR, f"zoo_example_{label}.png"),
+            save_path=os.path.join(OUTPUT_DIR, f"zhu_example_{label}.png"),
         )
         plt.close(fig)
 
     # --- Combined comparison figure ---
-    plot_zoo_comparison(
+    plot_zhu_comparison(
         results,
-        save_path=os.path.join(OUTPUT_DIR, "zoo_paper_comparison.png"),
+        save_path=os.path.join(OUTPUT_DIR, "zhu_paper_comparison.png"),
     )
 
     # --- Summary table ---
