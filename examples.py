@@ -1,13 +1,15 @@
 """
 Example gallery for representative_cycles.py
 =============================================
-Runs five example datasets and saves figures to ./output/:
+Runs seven examples and saves figures to ./output/:
 
   1. Circle       — one H1 loop
   2. Figure-eight — two H1 loops
   3. Torus        — two H1 loops (H1(T^2) = Z x Z)
   4. Annulus      — one H1 loop
   5. Sphere       — no H1 loops (H2 void, not captured here)
+  6. Essential    — a loop that never dies (death = inf), under max_edge_length
+  7. Overview     — plot_overview() and plot_cycle() on the torus
 
 Run with:
     python examples.py
@@ -139,7 +141,7 @@ def example_torus():
     fig = rc.plot_matplotlib(
         max_cycles=4,
         figsize=(18, 5),
-        title="Torus — Representative H₁ Cycles (3D projected to first 2 dims)",
+        title="Torus — Representative H₁ Cycles (each on its own best-fit plane)",
         save_path=os.path.join(OUTPUT_DIR, "torus_cycles.png"),
     )
     plt.close(fig)
@@ -181,7 +183,7 @@ def example_sphere():
     fig = rc.plot_matplotlib(
         max_cycles=4,
         figsize=(18, 5),
-        title="Sphere — H₁ Cycles (3D projected)",
+        title="Sphere — H₁ Cycles (each on its own best-fit plane)",
         save_path=os.path.join(OUTPUT_DIR, "sphere_cycles.png"),
     )
     plt.close(fig)
@@ -192,13 +194,75 @@ def example_sphere():
     print("  Saved: sphere_cycles.png, sphere_cycles.html")
 
 
+def example_essential_bar():
+    """A loop that never dies within the filtration.
+
+    Capping the filtration at `max_edge_length=1.0` stops the Rips complex
+    ever filling the circle in, so the loop survives to the end and its bar
+    has `death = inf`.  Earlier releases dropped exactly these classes — the
+    most persistent loop in the data — and reported nothing at all here.
+    """
+    print("\n=== Example 6: Essential bar (death = ∞) ===")
+    X = make_circle(n=80, noise=0.03)
+
+    rc = RepresentativeCycles(max_edge_length=1.0, min_persistence=0.3)
+    rc.fit(X)
+    rc.summary()
+
+    essential = [f for f in rc.features_ if f.is_essential]
+    print(f"  essential features: {len(essential)} of {len(rc.features_)}")
+
+    fig = rc.plot_matplotlib(
+        title="Circle under max_edge_length=1.0 — an essential H₁ cycle",
+        save_path=os.path.join(OUTPUT_DIR, "essential_cycles.png"),
+    )
+    plt.close(fig)
+
+    fig = rc.plot_barcode(
+        save_path=os.path.join(OUTPUT_DIR, "essential_barcode.png"),
+    )
+    plt.close(fig)
+
+    try:
+        frame = rc.to_dataframe()
+    except ImportError:
+        print("  (install pandas to see to_dataframe())")
+    else:
+        print(frame[["birth", "death", "is_essential", "is_verified"]])
+
+    print("  Saved: essential_cycles.png, essential_barcode.png")
+
+
+def example_overview_figure():
+    """The composite view, and one cycle at full size."""
+    print("\n=== Example 7: Overview and single-cycle figures ===")
+    X = make_torus(n=400, noise=0.04)
+
+    rc = RepresentativeCycles(min_persistence=0.15)
+    rc.fit(X)
+
+    fig = rc.plot_overview(
+        max_cycles=4,
+        title="Torus — Overview",
+        save_path=os.path.join(OUTPUT_DIR, "torus_overview.png"),
+    )
+    plt.close(fig)
+
+    fig = rc.plot_cycle(
+        0,
+        save_path=os.path.join(OUTPUT_DIR, "torus_cycle_0.png"),
+    )
+    plt.close(fig)
+    print("  Saved: torus_overview.png, torus_cycle_0.png")
+
+
 # ---------------------------------------------------------------------------
-# Combined overview figure
+# Combined diagram gallery
 # ---------------------------------------------------------------------------
 
-def example_overview():
+def example_diagram_gallery():
     """Side-by-side persistence diagrams for all datasets."""
-    print("\n=== Overview: Persistence Diagrams ===")
+    print("\n=== Gallery: Persistence Diagrams ===")
     datasets = {
         "Circle": make_circle(80),
         "Figure-Eight": make_figure_eight(120),
@@ -248,5 +312,7 @@ if __name__ == "__main__":
     example_torus()
     example_annulus()
     example_sphere()
-    example_overview()
+    example_essential_bar()
+    example_overview_figure()
+    example_diagram_gallery()
     print(f"\nAll outputs saved to: {OUTPUT_DIR}")

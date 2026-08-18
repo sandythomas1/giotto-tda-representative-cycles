@@ -51,4 +51,5 @@ py-modules = ["representative_cycles"]
 testpaths = ["tests"]
 markers = [
     "perf: performance comparison tests (deselect with '-m \"not perf\"')",
+    "scripts: runs the shipped example scripts end to end (deselect with '-m \"not scripts\"')",
 ]

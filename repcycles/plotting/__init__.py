@@ -8,15 +8,20 @@ Importing this package pulls in matplotlib.  ``repcycles.core`` therefore
 imports it lazily, inside the ``plot_*`` methods.
 """
 
-from .barcode import plot_barcode
+from .barcode import draw_barcode, plot_barcode
 from .diagram import draw_persistence_diagram
 from .interactive import plot_plotly
-from .panels import draw_cycle_panel, plot_matplotlib
+from .overview import plot_cycle, plot_overview
+from .panels import draw_cycle_overlay, draw_cycle_panel, plot_matplotlib
 
 __all__ = [
     "draw_persistence_diagram",
+    "draw_barcode",
     "draw_cycle_panel",
+    "draw_cycle_overlay",
     "plot_matplotlib",
     "plot_barcode",
+    "plot_overview",
+    "plot_cycle",
     "plot_plotly",
 ]

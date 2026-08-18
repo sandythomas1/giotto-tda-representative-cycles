@@ -124,7 +124,7 @@ Execution waves (each wave's tasks are mutually independent):
     marked `@pytest.mark.perf`. **No wall-clock assertion.**
   - Equivalence asserted on total geodesic length (1e-9) and `is_verified`, not on edge arrays.
   - AC13a: dtypes are float32/int32 and `nbytes` within 2× the dense mask.
-- Status: in-progress
+- Status: done
 
 ## T8: `to_dataframe()` and a verification column in `summary()`
 - Description: F9 export with lazy pandas import and a clear `ImportError`; `summary()` gains
@@ -190,7 +190,7 @@ Execution waves (each wave's tasks are mutually independent):
   - 3-D fixtures render panels using the per-cycle plane; the variance annotation is present.
   - AC15: no `DeprecationWarning` under `-W error::DeprecationWarning`.
   - Returns a figure; `plt.show` is never called (assert via monkeypatch).
-- Status: in-progress
+- Status: done
 
 ## T13: `plot_overview()` and `plot_cycle()`
 - Description: V5 — one figure combining cloud + all cycles overlaid + diagram + barcode,
@@ -203,7 +203,7 @@ Execution waves (each wave's tasks are mutually independent):
   - AC9 (matplotlib half): colour of feature *k* identical across panels, barcode, overview.
   - AC12 (matplotlib half): `plot_cycle(0)` returns a figure for 2-D and 3-D input.
   - `plot_overview()` on a fit with zero features renders an empty-state figure, not a crash.
-- Status: todo
+- Status: done
 
 ## T14: Interactive plotly view
 - Description: V7 hover metadata on every cycle trace (index, birth, death, persistence,
@@ -230,7 +230,7 @@ Execution waves (each wave's tasks are mutually independent):
   - AC16: both scripts run to completion; Zhu replication reports all five examples passing.
   - README documents every new parameter, field, and method, and the B1–B5 breaking changes.
   - No README claim is made that the tests don't verify.
-- Status: todo
+- Status: done
 
 ## T16: Integration gate
 - Description: Whole-suite verification against the acceptance criteria, cross-lane colour
@@ -243,4 +243,4 @@ Execution waves (each wave's tasks are mutually independent):
   - All 16 acceptance criteria in `spec.md` map to a passing test, listed explicitly.
   - Full suite green, including the pre-existing 35 tests.
   - `pytest -W error::DeprecationWarning` passes.
-- Status: todo
+- Status: done

@@ -50,6 +50,7 @@ from .diagram import draw_persistence_diagram
 __all__ = [
     "plot_matplotlib",
     "draw_cycle_panel",
+    "draw_cycle_overlay",
     "GID_CLOUD",
     "GID_CYCLE",
     "GID_BIRTH_EDGE",
@@ -240,6 +241,37 @@ def draw_cycle_panel(
     if not feature.is_verified:
         _annotate_unverified(ax)
     _add_legend(ax, color, feature.is_verified)
+
+
+def draw_cycle_overlay(
+    ax: Axes, coords: np.ndarray, feature: CycleFeature, color: str
+) -> None:
+    """Draw one loop onto *already projected* coordinates, bare.
+
+    The loop and its marked vertices only — no context cloud, no title, no
+    annotation, no legend.  This is what a composite view needs: several
+    cycles share one pair of axes and one projection, so the furniture has to
+    be drawn once by the caller rather than once per loop.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+    coords : np.ndarray, shape (n_points, 2)
+        Projected coordinates for the **whole** cloud, one row per point —
+        the same indexing the feature's vertex indices use.
+    feature : CycleFeature
+    color : str
+        Hex colour from :func:`repcycles.palette.cycle_colors`.
+
+    Raises
+    ------
+    IndexError
+        If the feature references a point outside *coords*.
+    """
+    coords = np.asarray(coords, dtype=float)
+    _check_indices(feature, len(coords))
+    _draw_cycle_edges(ax, coords, feature, color)
+    _draw_marked_vertices(ax, coords, feature, color)
 
 
 # ---------------------------------------------------------------------------

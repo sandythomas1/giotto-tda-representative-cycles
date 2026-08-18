@@ -470,6 +470,23 @@ def _ceil_to_float32(lengths: np.ndarray) -> np.ndarray:
     return key
 
 
+def _floor_to_float32(value: float) -> np.float32:
+    """Round *value* down to the nearest ``float32``.
+
+    The mirror of :func:`_ceil_to_float32`, and needed for the opposite
+    reason: it turns a ``float64`` *radius* into a needle that can be compared
+    against the ``float32`` keys without NumPy promoting the whole key array
+    on every :func:`numpy.searchsorted` call.  Rounding *down* keeps the
+    comparison exact -- a ``float32`` key is ``<=`` a float64 radius exactly
+    when it is ``<=`` the largest ``float32`` not exceeding that radius -- so
+    the prefix is neither widened nor narrowed by the conversion.
+    """
+    key = np.float32(value)
+    if key > value:
+        key = np.nextafter(key, np.float32(-np.inf))
+    return key
+
+
 def _validate_birth_edge(
     birth_edge: Tuple[int, int], dist_matrix: np.ndarray
 ) -> Tuple[int, int]:

@@ -97,6 +97,32 @@ def plot_barcode(
     to a visible minimum, because that would draw a bar the data does not
     support.
     """
+    # Validated before the figure exists, so a bad diagram raises instead of
+    # leaving an orphan figure behind for the caller to close.
+    _validate_diagram(diagram)
+
+    fig, ax = plt.subplots(figsize=figsize)
+    draw_barcode(ax, diagram, features, colors)
+    fig.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=150, bbox_inches="tight")
+    return fig
+
+
+def draw_barcode(
+    ax: plt.Axes,
+    diagram: np.ndarray,
+    features: Optional[Sequence] = None,
+    colors: Optional[Sequence[str]] = None,
+) -> None:
+    """Draw the barcode onto *ax*, without owning a figure.
+
+    The axes-level half of :func:`plot_barcode`, so that a composite figure
+    (:func:`repcycles.plotting.overview.plot_overview`) shows the *same*
+    barcode rather than a second implementation of one that could drift.
+    Arguments and validation are exactly as documented there.
+    """
     dgm = _validate_diagram(diagram)
     features = list(features) if features is not None else []
     colors = _resolve_colors(features, colors)
@@ -109,7 +135,6 @@ def plot_barcode(
     order = _bar_order(births, deaths, is_essential)
     x_lo, x_hi, arrow_tip = _x_extent(births, deaths, is_essential)
 
-    fig, ax = plt.subplots(figsize=figsize)
     n_bars = len(dgm)
     tick_positions: list[float] = []
     tick_labels: list[str] = []
@@ -173,11 +198,6 @@ def plot_barcode(
     ax.set_axisbelow(True)
 
     _add_legend(ax, has_features=bool(marked), has_essential=bool(is_essential.any()))
-    fig.tight_layout()
-
-    if save_path:
-        fig.savefig(save_path, dpi=150, bbox_inches="tight")
-    return fig
 
 
 # ----------------------------------------------------------------------
